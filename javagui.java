@@ -10,14 +10,26 @@ public class javagui {
         //  Creating all panels
         JPanel outPanel = new JPanel();
 
+        // Change the preferred size of the outPanel
+        outPanel.setPreferredSize(new Dimension(700, 100)); // Set the preferred size to be 700 width and 100 height
+
+        // Change the layout manager of outPanel to FlowLayout with center alignment
+        outPanel.setLayout(new GridBagLayout()); 
+
+        
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-        JScrollPane scrollPaneMenu = new JScrollPane(menuPanel);
-        scrollPaneMenu.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        // Creating a textfield for output
-        JLabel outLabel = new JLabel("Here will be the output");
-        outPanel.add(outLabel);
+        // Creating a label for output
+        JLabel outLabel = new JLabel("<html><div style='text-align: center;'>2400</div></html>");
+        // Change font and size
+        outLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER; // Set anchor to center
+        outPanel.add(outLabel, gbc);
 
         // Create a label and text field for entering the number
         JLabel numberLabel = new JLabel("Enter Number of employments:");
@@ -31,11 +43,10 @@ public class javagui {
         // Create a panel to hold dynamically added text fields
         JPanel textFieldPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         textFieldPanel.setLayout(new BoxLayout(textFieldPanel, BoxLayout.Y_AXIS));
-    
+
         // Create a scroll pane and add the text field panel to it
         JScrollPane scrollPane = new JScrollPane(textFieldPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
 
         JButton button = new JButton("set");
         // Add action listener to the number text field
@@ -82,7 +93,7 @@ public class javagui {
         agePanel.add(ageLabel);
         agePanel.add(ageTextField);
 
-        // Create a panel to store the lvl of disability
+        // Create a panel to store the level of disability
         JPanel disPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel disLabel = new JLabel("Your level of disability: ");
         JTextField disTextField = new JTextField(10);
@@ -105,13 +116,13 @@ public class javagui {
         menuPanel.add(butPanel);
 
         mainPanel.add(outPanel, BorderLayout.NORTH);
-        mainPanel.add(scrollPaneMenu, BorderLayout.CENTER);
-        
+        mainPanel.add(menuPanel, BorderLayout.CENTER);
+
         // Add main panel to the frame
         frame.getContentPane().add(mainPanel);
 
         // Pack the frame to adjust its size according to the content
-        frame.setSize(700, 400);;
+        frame.setSize(650, 500);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
