@@ -83,6 +83,8 @@ public class javagui {
                 // Refresh the panel
                 textFieldPanel.revalidate();
                 textFieldPanel.repaint();
+                frame.revalidate();
+                frame.repaint();
             }
         });
 
