@@ -2,9 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class javagui {
+    private static int numOfJobs;
+    private static int  age;
+    private static int lvl;
+    private static double pension;
+
     public static void main(String[] args) {
+
         JFrame frame = new JFrame("Pension calculator");
 
         //  Creating all panels
@@ -60,6 +68,7 @@ public class javagui {
                 String inputText = numberTextField.getText();
                 int numFields = 0;
                 if (!inputText.isEmpty()) numFields = Integer.parseInt(inputText);
+                numOfJobs = numFields;
 
                 // Create and add the required number of text fields
                 for (int i = 0; i < numFields; i++) {
@@ -106,6 +115,71 @@ public class javagui {
         JButton button2 = new JButton("calculate");
         butPanel.add(button2);
 
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Create an ArrayList to store the text from validated text fields
+                ArrayList<String> textFieldValues = new ArrayList<>();
+
+                // Iterate over components of textFieldPanel
+                Component[] components = textFieldPanel.getComponents();
+                for (Component component : components) {
+                    if (component instanceof JPanel) {
+                        // For each JPanel (which contains JLabel and JTextField), get the JTextField component
+                        Component[] subComponents = ((JPanel) component).getComponents();
+                        String jobName = null;
+                        double salary = 0.0;
+        
+                        for (Component subComponent : subComponents) {
+                            if (subComponent instanceof JTextField) {
+                                String text = ((JTextField) subComponent).getText();
+                                if (text.matches("^\\d*\\.?\\d+$")) { // Regex to check for positive integer or double
+                                    textFieldValues.add(text);
+                                } else {
+                                    // Raise an error message if input is invalid
+                                    JOptionPane.showMessageDialog(frame, "Invalid input: Please enter positive numbers", "Error", JOptionPane.ERROR_MESSAGE);
+                                    return; // Exit the method
+                                }
+                            }
+                        }
+                    }
+                }
+        
+                // Convert the ArrayList to an array if needed
+                String[] textFieldValuesArray = textFieldValues.toArray(new String[textFieldValues.size()]);
+
+                String[] jobValues = new String[textFieldValuesArray.length / 2];
+                String[] salaryValues = new String[textFieldValuesArray.length / 2];
+                int k = 0;
+                int l = 0;
+
+                for (int i = 0; i < textFieldValuesArray.length; i++) {
+                    if (i % 2 == 0) {
+                        jobValues[k] = textFieldValuesArray[i];
+                        k++; 
+                    }
+                    else {
+                        salaryValues[l] = textFieldValuesArray[i];
+                        l++;
+                    }
+                }
+
+                String ageEntered = ageTextField.getText();
+                if (!ageEntered.isEmpty()) age = Integer.parseInt(ageEntered);
+
+                String lvlEntered = disTextField.getText();
+                if (!lvlEntered.isEmpty()) lvl = Integer.parseInt(lvlEntered);
+        
+                // Display the array for testing
+                System.out.println("Number of jobs: " + numOfJobs);
+                System.out.println(Arrays.toString(jobValues));
+                System.out.println(Arrays.toString(salaryValues));
+                System.out.println("Age: " + age);
+                System.out.println("Lvl of disability: " + lvl);
+            }
+        });
+        
+        
         // Create a main panel and add subpanels to it
         JPanel mainPanel = new JPanel();
         numberPanel.add(button);
