@@ -9,7 +9,14 @@ public class javagui {
     private static int numOfJobs;
     private static int  age;
     private static int lvl;
-    private static double pension;
+    private static int staj = 0;
+    private static double pensionReslt;
+
+    static {
+        System.loadLibrary("native");
+    }
+
+    private native double pension(int n, int year, int staj, int k, double sal[]);
 
     public static void main(String[] args) {
 
@@ -29,7 +36,7 @@ public class javagui {
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
 
         // Creating a label for output
-        JLabel outLabel = new JLabel("<html><div style='text-align: center;'>2400</div></html>");
+        JLabel outLabel = new JLabel("<html><div style='text-align: center;'>Welcome!</div></html>");
         // Change font and size
         outLabel.setFont(new Font("Arial", Font.BOLD, 24));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -127,8 +134,8 @@ public class javagui {
                     if (component instanceof JPanel) {
                         // For each JPanel (which contains JLabel and JTextField), get the JTextField component
                         Component[] subComponents = ((JPanel) component).getComponents();
-                        String jobName = null;
-                        double salary = 0.0;
+                        //String jobName = null;
+                        //double salary = 0.0;
         
                         for (Component subComponent : subComponents) {
                             if (subComponent instanceof JTextField) {
@@ -148,21 +155,21 @@ public class javagui {
                 // Convert the ArrayList to an array if needed
                 String[] textFieldValuesArray = textFieldValues.toArray(new String[textFieldValues.size()]);
 
-                String[] jobValues = new String[textFieldValuesArray.length / 2];
-                String[] salaryValues = new String[textFieldValuesArray.length / 2];
-                int k = 0;
-                int l = 0;
+                // Declare an array to store the products
+                double[] medSal = new double[textFieldValuesArray.length / 2];
 
-                for (int i = 0; i < textFieldValuesArray.length; i++) {
-                    if (i % 2 == 0) {
-                        jobValues[k] = textFieldValuesArray[i];
-                        k++; 
-                    }
-                    else {
-                        salaryValues[l] = textFieldValuesArray[i];
-                        l++;
-                    }
+                // Initialize an index for the medSal array
+                int k = 0;
+
+                // Calculate the product of consecutive pairs of numbers
+                for (int i = 0; i < textFieldValuesArray.length - 1; i += 2) {
+                    double num1 = Double.parseDouble(textFieldValuesArray[i]);
+                    double num2 = Double.parseDouble(textFieldValuesArray[i + 1]);
+                    medSal[k] = num1 * num2;
+                    staj += num1;
+                    k++; // Increment the index
                 }
+
 
                 String ageEntered = ageTextField.getText();
                 if (!ageEntered.isEmpty()) age = Integer.parseInt(ageEntered);
@@ -172,10 +179,13 @@ public class javagui {
         
                 // Display the array for testing
                 System.out.println("Number of jobs: " + numOfJobs);
-                System.out.println(Arrays.toString(jobValues));
-                System.out.println(Arrays.toString(salaryValues));
+                System.out.println(Arrays.toString(medSal));
                 System.out.println("Age: " + age);
                 System.out.println("Lvl of disability: " + lvl);
+                pensionReslt = new javagui().pension(numOfJobs, age, staj, lvl, medSal);
+                outLabel.setText("<html><div style='text-align: center;'>" + pensionReslt + "</div></html>");
+
+                System.out.println("Your pension will be: " + pensionReslt);
             }
         });
         

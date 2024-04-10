@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/include",
+                "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/include/darwin",
+                "${workspaceFolder}"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64",
+            "browse": {
+                "path": [
+                    "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/include",
+                    "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/include/darwin"
+                ]
+            }
+        }
+    ],
+    "version": 4
+}
