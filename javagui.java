@@ -182,7 +182,7 @@ public class javagui {
                 System.out.println(Arrays.toString(medSal));
                 System.out.println("Age: " + age);
                 System.out.println("Lvl of disability: " + lvl);
-                pensionReslt = new javagui().pension(numOfJobs, age, staj, lvl, medSal);
+                pensionReslt = new javagui().pension(lvl, age, staj, numOfJobs, medSal);
                 outLabel.setText("<html><div style='text-align: center;'>" + pensionReslt + "</div></html>");
 
                 System.out.println("Your pension will be: " + pensionReslt);
