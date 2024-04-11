@@ -125,6 +125,7 @@ public class javagui {
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                staj = 0;
                 // Create an ArrayList to store the text from validated text fields
                 ArrayList<String> textFieldValues = new ArrayList<>();
 
