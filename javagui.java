@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class javagui {
     private static int numOfJobs;
-    private static int  age;
+    private static int age;
     private static int lvl;
     private static int staj = 0;
     private static double pensionReslt;
@@ -22,18 +22,15 @@ public class javagui {
 
         JFrame frame = new JFrame("Pension calculator");
 
-        //  Creating all panels
+        // Creating all panels
         JPanel outPanel = new JPanel();
 
         // Change the preferred size of the outPanel
         outPanel.setPreferredSize(new Dimension(700, 100)); // Set the preferred size to be 700 width and 100 height
 
         // Change the layout manager of outPanel to FlowLayout with center alignment
-        outPanel.setLayout(new GridBagLayout()); 
+        outPanel.setLayout(new GridBagLayout());
 
-        
-        JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
 
         // Creating a label for output
         JLabel outLabel = new JLabel("<html><div style='text-align: center;'>Welcome!</div></html>");
@@ -45,6 +42,14 @@ public class javagui {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER; // Set anchor to center
         outPanel.add(outLabel, gbc);
+
+        // Create a main panel and add subpanels to it
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+
+        // Create a panel for menu components
+        JPanel menuComponentsPanel = new JPanel();
+        menuComponentsPanel.setLayout(new BoxLayout(menuComponentsPanel, BoxLayout.Y_AXIS));
 
         // Create a label and text field for entering the number
         JLabel numberLabel = new JLabel("Enter Number of employments:");
@@ -104,6 +109,22 @@ public class javagui {
             }
         });
 
+        // Add the 'set' button to the menu components panel
+        numberPanel.add(button);
+        menuComponentsPanel.add(numberPanel);
+         // Adding the 'set' button here
+
+        // Add the rest of the components to the menu components panel
+        menuComponentsPanel.add(scrollPane);
+        menuComponentsPanel.add(numberPanel);
+        menuComponentsPanel.add(scrollPane);
+        menuComponentsPanel.add(numberPanel);
+        menuComponentsPanel.add(scrollPane);
+        menuComponentsPanel.add(numberPanel);
+        menuComponentsPanel.add(scrollPane);
+        menuComponentsPanel.add(numberPanel);
+        menuComponentsPanel.add(scrollPane);
+
         // Create a panel to store the age
         JPanel agePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel ageLabel = new JLabel("Your age: ");
@@ -137,7 +158,7 @@ public class javagui {
                         Component[] subComponents = ((JPanel) component).getComponents();
                         //String jobName = null;
                         //double salary = 0.0;
-        
+
                         for (Component subComponent : subComponents) {
                             if (subComponent instanceof JTextField) {
                                 String text = ((JTextField) subComponent).getText();
@@ -152,7 +173,7 @@ public class javagui {
                         }
                     }
                 }
-        
+
                 // Convert the ArrayList to an array if needed
                 String[] textFieldValuesArray = textFieldValues.toArray(new String[textFieldValues.size()]);
 
@@ -177,7 +198,7 @@ public class javagui {
 
                 String lvlEntered = disTextField.getText();
                 if (!lvlEntered.isEmpty()) lvl = Integer.parseInt(lvlEntered);
-        
+
                 // Display the array for testing
                 System.out.println("Number of jobs: " + numOfJobs);
                 System.out.println(Arrays.toString(medSal));
@@ -189,21 +210,21 @@ public class javagui {
                 System.out.println("Your pension will be: " + pensionReslt);
             }
         });
-        
-        
-        // Create a main panel and add subpanels to it
-        JPanel mainPanel = new JPanel();
-        numberPanel.add(button);
-        mainPanel.setLayout(new BorderLayout());
 
-        menuPanel.add(numberPanel);
-        menuPanel.add(scrollPane);
-        menuPanel.add(agePanel);
-        menuPanel.add(disPanel);
-        menuPanel.add(butPanel);
+        // Add components to the menu components panel
+        menuComponentsPanel.add(numberPanel);
+        menuComponentsPanel.add(scrollPane);
+        menuComponentsPanel.add(agePanel);
+        menuComponentsPanel.add(disPanel);
+        menuComponentsPanel.add(butPanel);
+
+        // Create a tabbed pane with two tabs
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Disability Pension", menuComponentsPanel); // First tab with the menu panel
+        tabbedPane.addTab("old age pension", new JPanel()); // Second tab with an empty panel
 
         mainPanel.add(outPanel, BorderLayout.NORTH);
-        mainPanel.add(menuPanel, BorderLayout.CENTER);
+        mainPanel.add(tabbedPane, BorderLayout.CENTER);
 
         // Add main panel to the frame
         frame.getContentPane().add(mainPanel);
