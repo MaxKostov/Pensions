@@ -28,7 +28,7 @@ public class javagui {
         // Change the preferred size of the outPanel
         outPanel.setPreferredSize(new Dimension(700, 100)); // Set the preferred size to be 700 width and 100 height
 
-        // Change the layout manager of outPanel to FlowLayout with center alignment
+
         outPanel.setLayout(new GridBagLayout());
 
 
@@ -47,9 +47,119 @@ public class javagui {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 
-        // Create a panel for menu components
+        // Create a panel for menu components (disability pension)
         JPanel menuComponentsPanel = new JPanel();
         menuComponentsPanel.setLayout(new BoxLayout(menuComponentsPanel, BoxLayout.Y_AXIS));
+
+        //Create a penel for age pension
+        JPanel oldAgePensionPanel = new JPanel();
+        oldAgePensionPanel.setLayout(new BoxLayout(oldAgePensionPanel, BoxLayout.Y_AXIS));
+
+
+        // Here is building the menu for age pension
+
+        // Creating all necessary panels
+        JPanel selPanel = new JPanel();
+        selPanel.setLayout(new GridLayout(7, 1));
+
+        JPanel jobSetJPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        JPanel jobsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        jobsPanel.setLayout(new BoxLayout(jobsPanel, BoxLayout.Y_AXIS));
+
+        JScrollPane scrollField = new JScrollPane(jobsPanel);
+        scrollField.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        JPanel calcButton = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+
+        // Creating the radio buttons:
+        JLabel pLevels = new JLabel("Professional levels:");
+        JRadioButton firstButton = new JRadioButton("1. For agricultural workers, handymen (I, II qualification category) and unskilled support staff");
+        JRadioButton secondButton = new JRadioButton("2. For workers of average qualification (III, IV qualification category)");
+        JRadioButton thirdButton = new JRadioButton("3. For highly qualified workers (V, VI, VII, VIII qualification category) and specialists with secondary specialized education");
+        JRadioButton fourthButton = new JRadioButton("4. For specialists with higher education");
+        JRadioButton fifthButton = new JRadioButton("5. For managers at the level of a structural unit");
+        JRadioButton sixthButton = new JRadioButton("6. For heads of enterprises and their deputies");
+        
+        ButtonGroup group = new ButtonGroup();
+        group.add(firstButton);
+        group.add(secondButton);
+        group.add(thirdButton);
+        group.add(fourthButton);
+        group.add(fifthButton);
+        group.add(sixthButton);
+        
+        // Adding radio buttons to the panel
+        selPanel.add(pLevels);
+        selPanel.add(firstButton);
+        selPanel.add(secondButton);
+        selPanel.add(thirdButton);
+        selPanel.add(fourthButton);
+        selPanel.add(fifthButton);
+        selPanel.add(sixthButton);
+
+        // Creating textfield for number of jobs and set button
+        JLabel jobsNumber = new JLabel("Enter Number of employments: ");
+        JTextField jobsTextField = new JTextField(10);
+        JButton setButton = new JButton("set");
+
+        jobSetJPanel.add(jobsNumber);
+        jobSetJPanel.add(jobsTextField);
+        jobSetJPanel.add(setButton);
+
+        setButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jobsPanel.removeAll();
+
+                String numOfFields = jobsTextField.getText();
+                int number = 0;
+                if (!numOfFields.isEmpty()) number = Integer.parseInt(numOfFields);
+                // place for numOfJobs
+
+                for (int i = 0; i < number; i++) {
+                    JPanel fPanel = new JPanel();
+                    fPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+                    JLabel lbl = new JLabel("Job " + (i + 1) + ": ");
+                    JTextField tF = new JTextField(20);
+                    tF.setPreferredSize(new Dimension(150, 20));
+
+                    JLabel lbl2 = new JLabel("Salary: ");
+                    JTextField tF2 = new JTextField(20);
+
+                    fPanel.add(lbl);
+                    fPanel.add(tF);
+                    fPanel.add(lbl2);
+                    fPanel.add(tF2);
+                    jobsPanel.add(fPanel);
+                }
+                // Refresh the panel
+                jobsPanel.revalidate();
+                jobsPanel.repaint();
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
+        // Calculate button
+        JButton cButton = new JButton("calculate");
+        calcButton.add(cButton);
+
+
+        // Grouping all panels in one
+        oldAgePensionPanel.add(selPanel);
+        oldAgePensionPanel.add(jobSetJPanel);
+        oldAgePensionPanel.add(scrollField);
+        oldAgePensionPanel.add(calcButton);
+        
+
+
+        // End of building the menu for age pension
+
+
+        // Here is building the menu for disability pension
 
         // Create a label and text field for entering the number
         JLabel numberLabel = new JLabel("Enter Number of employments:");
@@ -69,6 +179,7 @@ public class javagui {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         JButton button = new JButton("set");
+        
         // Add action listener to the number text field
         button.addActionListener(new ActionListener() {
             @Override
@@ -112,18 +223,9 @@ public class javagui {
         // Add the 'set' button to the menu components panel
         numberPanel.add(button);
         menuComponentsPanel.add(numberPanel);
-         // Adding the 'set' button here
+        menuComponentsPanel.add(scrollPane);
 
-        // Add the rest of the components to the menu components panel
-        menuComponentsPanel.add(scrollPane);
-        menuComponentsPanel.add(numberPanel);
-        menuComponentsPanel.add(scrollPane);
-        menuComponentsPanel.add(numberPanel);
-        menuComponentsPanel.add(scrollPane);
-        menuComponentsPanel.add(numberPanel);
-        menuComponentsPanel.add(scrollPane);
-        menuComponentsPanel.add(numberPanel);
-        menuComponentsPanel.add(scrollPane);
+
 
         // Create a panel to store the age
         JPanel agePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -218,10 +320,15 @@ public class javagui {
         menuComponentsPanel.add(disPanel);
         menuComponentsPanel.add(butPanel);
 
+        // End of creation of disability menu
+
+
+
+
         // Create a tabbed pane with two tabs
         JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("old age pension", oldAgePensionPanel); // Second tab with an empty panel
         tabbedPane.addTab("Disability Pension", menuComponentsPanel); // First tab with the menu panel
-        tabbedPane.addTab("old age pension", new JPanel()); // Second tab with an empty panel
 
         mainPanel.add(outPanel, BorderLayout.NORTH);
         mainPanel.add(tabbedPane, BorderLayout.CENTER);
@@ -230,7 +337,7 @@ public class javagui {
         frame.getContentPane().add(mainPanel);
 
         // Pack the frame to adjust its size according to the content
-        frame.setSize(650, 500);
+        frame.setSize(900, 650);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
