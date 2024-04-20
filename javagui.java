@@ -75,20 +75,13 @@ public class javagui {
 
         // Creating the radio buttons:
         JLabel pLevels = new JLabel("Professional levels:");
-        JRadioButton firstButton = new JRadioButton("1. For agricultural workers, handymen (I, II qualification category) and unskilled support staff");
-        JRadioButton secondButton = new JRadioButton("2. For workers of average qualification (III, IV qualification category)");
-        JRadioButton thirdButton = new JRadioButton("3. For highly qualified workers (V, VI, VII, VIII qualification category) and specialists with secondary specialized education");
-        JRadioButton fourthButton = new JRadioButton("4. For specialists with higher education");
-        JRadioButton fifthButton = new JRadioButton("5. For managers at the level of a structural unit");
-        JRadioButton sixthButton = new JRadioButton("6. For heads of enterprises and their deputies");
+        JLabel firstButton = new JLabel("1. For agricultural workers, handymen (I, II qualification category) and unskilled support staff");
+        JLabel secondButton = new JLabel("2. For workers of average qualification (III, IV qualification category)");
+        JLabel thirdButton = new JLabel("3. For highly qualified workers (V, VI, VII, VIII qualification category) and specialists with secondary specialized education");
+        JLabel fourthButton = new JLabel("4. For specialists with higher education");
+        JLabel fifthButton = new JLabel("5. For managers at the level of a structural unit");
+        JLabel sixthButton = new JLabel("6. For heads of enterprises and their deputies");
         
-        ButtonGroup group = new ButtonGroup();
-        group.add(firstButton);
-        group.add(secondButton);
-        group.add(thirdButton);
-        group.add(fourthButton);
-        group.add(fifthButton);
-        group.add(sixthButton);
         
         // Adding radio buttons to the panel
         selPanel.add(pLevels);
@@ -121,13 +114,18 @@ public class javagui {
                 for (int i = 0; i < number; i++) {
                     JPanel fPanel = new JPanel();
                     fPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
+                    
+                     
                     JLabel lbl = new JLabel("Job " + (i + 1) + ": ");
                     JTextField tF = new JTextField(20);
                     tF.setPreferredSize(new Dimension(150, 20));
-
-                    JLabel lbl2 = new JLabel("Salary: ");
+                    JLabel lbl2 = new JLabel("Professional level: ");
+                    /* 
                     JTextField tF2 = new JTextField(20);
+                    */
+                    JComboBox<Integer> tF2 = new JComboBox<>(new Integer[]{1, 2, 3, 4, 5, 6});
+
+
 
                     fPanel.add(lbl);
                     fPanel.add(tF);

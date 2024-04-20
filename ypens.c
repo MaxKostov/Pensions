@@ -4,13 +4,19 @@
 // у которых страховой стаж, приобретенный после указанной даты,
 // составляет менее 5 лет
 
+/*
 #include <stdio.h>
 
-int main()
+int main {
+    
+    return 0;
+}
+
+int ypens(int numJobs, int years_n[], int months_n[], int Cpr_1[])
 {
     float Pmin = 2777.86;
     int years_of_working_total, months_of_working;
-    int n;
+    int n = numJobs;
     printf("Professional levels: \n"
            "1. For agricultural workers, handymen (I, II qualification category) and unskilled support staff \n"
            "2. For workers of average qualification (III, IV qualification category) \n"
@@ -18,8 +24,7 @@ int main()
            "4. For specialists with higher education \n"
            "5. For managers at the level of a structural unit \n"
            "6. For heads of enterprises and their deputies \n");
-    printf(" Input number of jobs: ");
-    scanf("%d", &n);
+
     int years_n[n], months_n[n];
     int Cpr_1[n];
     for (int i=0;i<n;i++){
@@ -61,4 +66,4 @@ int main()
     float P = Pmin/(2*Tmin) * Tt_and_Cpr;
     printf("Here is your pension: %.2f \n", P);
     return 0;
-}
+}*/
