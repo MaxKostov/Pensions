@@ -62,6 +62,8 @@ public class javagui {
         JPanel selPanel = new JPanel();
         selPanel.setLayout(new GridLayout(7, 1));
 
+        JPanel maleFemPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
         JPanel jobSetJPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         JPanel jobsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -82,6 +84,12 @@ public class javagui {
         JLabel fifthButton = new JLabel("5. For managers at the level of a structural unit");
         JLabel sixthButton = new JLabel("6. For heads of enterprises and their deputies");
         
+        JRadioButton maleButton = new JRadioButton("Male");
+        JRadioButton femaleButton = new JRadioButton("Female");
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(maleButton);
+        group.add(femaleButton);
         
         // Adding radio buttons to the panel
         selPanel.add(pLevels);
@@ -91,6 +99,9 @@ public class javagui {
         selPanel.add(fourthButton);
         selPanel.add(fifthButton);
         selPanel.add(sixthButton);
+
+        maleFemPanel.add(maleButton);
+        maleFemPanel.add(femaleButton);
 
         // Creating textfield for number of jobs and set button
         JLabel jobsNumber = new JLabel("Enter Number of employments: ");
@@ -148,6 +159,7 @@ public class javagui {
 
         // Grouping all panels in one
         oldAgePensionPanel.add(selPanel);
+        oldAgePensionPanel.add(maleFemPanel);
         oldAgePensionPanel.add(jobSetJPanel);
         oldAgePensionPanel.add(scrollField);
         oldAgePensionPanel.add(calcButton);
@@ -162,6 +174,18 @@ public class javagui {
         // Create a label and text field for entering the number
         JLabel numberLabel = new JLabel("Enter Number of employments:");
         JTextField numberTextField = new JTextField(10);
+
+        JPanel maleFemPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        JRadioButton maleButton2 = new JRadioButton("Male");
+        JRadioButton femaleButton2 = new JRadioButton("Female");
+
+        ButtonGroup group2 = new ButtonGroup();
+        group2.add(maleButton2);
+        group2.add(femaleButton2);
+        
+        maleFemPanel2.add(maleButton2);
+        maleFemPanel2.add(femaleButton2);
 
         // Create a panel for number input
         JPanel numberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -312,6 +336,7 @@ public class javagui {
         });
 
         // Add components to the menu components panel
+        menuComponentsPanel.add(maleFemPanel2);
         menuComponentsPanel.add(numberPanel);
         menuComponentsPanel.add(scrollPane);
         menuComponentsPanel.add(agePanel);
