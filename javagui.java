@@ -125,7 +125,7 @@ public class javagui {
 
         // Creating textfield for number of jobs and set button
         JLabel jobsNumber = new JLabel("Enter Number of employments: ");
-        JTextField jobsTextField = new JTextField(10);
+        JTextField jobsTextField = new JTextField(7);
         JButton setButton = new JButton("set");
 
         jobSetJPanel.add(jobsNumber);
