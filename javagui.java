@@ -2,10 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 public class javagui {
+    private static DecimalFormat df = new DecimalFormat("#.##");
     // Disability pension
     private static int numOfJobs;
     private static int age;
@@ -45,6 +48,7 @@ public class javagui {
     public static void main(String[] args) {
 
         JFrame frame = new JFrame("Pension calculator");
+        frame.getContentPane().setBackground(Color.decode("#6D87A1"));
 
         // Creating all panels
         JPanel outPanel = new JPanel();
@@ -54,12 +58,13 @@ public class javagui {
 
 
         outPanel.setLayout(new GridBagLayout());
+        outPanel.setBackground(Color.decode("#6D87A1"));
 
 
         // Creating a label for output
         JLabel outLabel = new JLabel("<html><div style='text-align: center;'>Welcome!</div></html>");
         // Change font and size
-        outLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        outLabel.setFont(new Font("Arial", Font.BOLD, 30));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -70,21 +75,26 @@ public class javagui {
         // Create a main panel and add subpanels to it
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
+        //mainPanel.setBackground(Color.decode("#263543"));
 
         // Create a panel for menu components (disability pension)
         JPanel menuComponentsPanel = new JPanel();
         menuComponentsPanel.setLayout(new BoxLayout(menuComponentsPanel, BoxLayout.Y_AXIS));
+        menuComponentsPanel.setBackground(Color.decode("#263543"));
 
         //Create a penel for age pension
         JPanel oldAgePensionPanel = new JPanel();
         oldAgePensionPanel.setLayout(new BoxLayout(oldAgePensionPanel, BoxLayout.Y_AXIS));
+        oldAgePensionPanel.setBackground(Color.decode("#263543"));
 
         JPanel selPanel2 = new JPanel();
         selPanel2.setLayout(new GridLayout(7, 1));
+        selPanel2.setBackground(Color.decode("#263543"));
 
         // Create a panel for 1999 pensions
         JPanel ussrJPanel = new JPanel();
         ussrJPanel.setLayout(new BoxLayout(ussrJPanel, BoxLayout.Y_AXIS));
+        ussrJPanel.setBackground(Color.decode("#263543"));
 
 
         // Here is building the menu for age pension
@@ -92,26 +102,44 @@ public class javagui {
         // Creating all necessary panels
         JPanel selPanel = new JPanel();
         selPanel.setLayout(new GridLayout(7, 1));
+        selPanel.setBackground(Color.decode("#263543"));
 
         JPanel maleFemPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        maleFemPanel.setBackground(Color.decode("#263543"));
 
         JPanel jobSetJPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        jobSetJPanel.setBackground(Color.decode("#263543"));
 
         JPanel jobsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         jobsPanel.setLayout(new BoxLayout(jobsPanel, BoxLayout.Y_AXIS));
+        jobsPanel.setBackground(Color.decode("#263543"));
 
         JScrollPane scrollField = new JScrollPane(jobsPanel);
         scrollField.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollField.setBorder(null);
+        scrollField.setBackground(Color.decode("#263543"));
+        scrollField.getVerticalScrollBar().setBackground(Color.decode("#263543"));
+        scrollField.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = Color.decode("#263543");
+            }
+        });
 
         JPanel calcButton = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        calcButton.setBackground(Color.decode("#263543"));
 
         JPanel overworkPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        overworkPanel.setBackground(Color.decode("#263543"));
 
 
         // Creating the radio buttons:
-        JLabel retLabel = new JLabel("Have you worked after retirement age?");       
+        JLabel retLabel = new JLabel("Have you worked after retirement age?");
+        retLabel.setForeground(Color.decode("#B9A57C"));       
         JRadioButton maleButton = new JRadioButton("Yes");
+        maleButton.setForeground(Color.decode("#B9A57C")); 
         JRadioButton femaleButton = new JRadioButton("No");
+        femaleButton.setForeground(Color.decode("#B9A57C")); 
 
         ButtonGroup group = new ButtonGroup();
         group.add(maleButton);
@@ -125,8 +153,12 @@ public class javagui {
 
         // Creating textfield for number of jobs and set button
         JLabel jobsNumber = new JLabel("Enter Number of employments: ");
+        jobsNumber.setForeground(Color.decode("#B9A57C")); 
         JTextField jobsTextField = new JTextField(7);
+        jobsTextField.setBackground(Color.decode("#6D87A1"));
         JButton setButton = new JButton("set");
+        setButton.setBackground(Color.decode("#B9A57C"));
+        
 
         jobSetJPanel.add(jobsNumber);
         jobSetJPanel.add(jobsTextField);
@@ -144,16 +176,23 @@ public class javagui {
 
                 for (int i = 0; i < number; i++) {
                     JPanel fPanel = new JPanel();
+                    fPanel.setBackground(Color.decode("#263543"));
                     fPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
                     
                      
                     JLabel lbl = new JLabel("Years in job " + (i + 1) + ": ");
+                    lbl.setForeground(Color.decode("#B9A57C")); 
                     JTextField tF = new JTextField(5);
+                    tF.setBackground(Color.decode("#6D87A1"));
                     tF.setPreferredSize(new Dimension(150, 20));
                     JLabel lbl2 = new JLabel("months: ");
+                    lbl2.setForeground(Color.decode("#B9A57C")); 
                     JTextField tF2 = new JTextField(5);
+                    tF2.setBackground(Color.decode("#6D87A1")); 
                     JLabel lbl3 = new JLabel("salary: ");
+                    lbl3.setForeground(Color.decode("#B9A57C")); 
                     JTextField tF3 = new JTextField(5);
+                    tF3.setBackground(Color.decode("#6D87A1"));
 
 
                     fPanel.add(lbl);
@@ -177,8 +216,11 @@ public class javagui {
             public void actionPerformed(ActionEvent e) {
                 overworkPanel.removeAll();
                 JLabel gg = new JLabel("Input how many years and months have you worked after retirement age: ");
+                gg.setForeground(Color.decode("#B9A57C")); 
                 g1 = new JTextField(5);
+                g1.setBackground(Color.decode("#6D87A1"));
                 g2 = new JTextField(5);
+                g2.setBackground(Color.decode("#6D87A1"));
 
                 choice = 1;
 
@@ -260,7 +302,8 @@ public class javagui {
                 System.out.println("k: " + k);
 
                 pensionReslt = new javagui().calculatePension(Tl, Tmin, Pmin, k, years, months, salary, choice, Ta_years, Ta_months);
-                outLabel.setText("<html><div style='text-align: center;'>" + pensionReslt + "</div></html>");
+                String formattedNumber = df.format(pensionReslt);
+                outLabel.setText("<html><div style='text-align: center;'>" + formattedNumber + "</div></html>");
 
                 System.out.println("Your pension will be: " + pensionReslt);
             }
@@ -284,20 +327,33 @@ public class javagui {
 
         // Create a label and text field for entering the number
         JLabel numberLabel = new JLabel("Enter Number of employments:");
+        numberLabel.setForeground(Color.decode("#B9A57C"));
         JTextField numberTextField = new JTextField(5);
+        numberTextField.setBackground(Color.decode("#6D87A1"));
 
         // Create a panel for number input
         JPanel numberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         numberPanel.add(numberLabel);
         numberPanel.add(numberTextField);
+        numberPanel.setBackground(Color.decode("#263543"));
 
         // Create a panel to hold dynamically added text fields
         JPanel textFieldPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         textFieldPanel.setLayout(new BoxLayout(textFieldPanel, BoxLayout.Y_AXIS));
+        textFieldPanel.setBackground(Color.decode("#263543"));
 
         // Create a scroll pane and add the text field panel to it
         JScrollPane scrollPane = new JScrollPane(textFieldPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBorder(null);
+        scrollPane.setBackground(Color.decode("#263543"));
+        scrollPane.getVerticalScrollBar().setBackground(Color.decode("#263543"));
+        scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = Color.decode("#263543");
+            }
+        });
 
         JButton button = new JButton("set");
         
@@ -317,14 +373,19 @@ public class javagui {
                 // Create and add the required number of text fields
                 for (int i = 0; i < numFields; i++) {
                     JPanel fieldPanel = new JPanel();
+                    fieldPanel.setBackground(Color.decode("#263543"));
                     fieldPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
                     JLabel label = new JLabel("Job " + (i + 1) + ": ");
+                    label.setForeground(Color.decode("#B9A57C"));
                     JTextField textField = new JTextField(5);
+                    textField.setBackground(Color.decode("#6D87A1"));
                     textField.setPreferredSize(new Dimension(150, 20));
 
                     JLabel label2 = new JLabel("Salary: ");
+                    label2.setForeground(Color.decode("#B9A57C"));
                     JTextField textField2 = new JTextField(5);
+                    textField2.setBackground(Color.decode("#6D87A1"));
 
                     fieldPanel.add(label);
                     fieldPanel.add(textField);
@@ -350,19 +411,26 @@ public class javagui {
 
         // Create a panel to store the age
         JPanel agePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        agePanel.setBackground(Color.decode("#263543"));
         JLabel ageLabel = new JLabel("Your age: ");
+        ageLabel.setForeground(Color.decode("#B9A57C"));
         JTextField ageTextField = new JTextField(5);
+        ageTextField.setBackground(Color.decode("#6D87A1"));
         agePanel.add(ageLabel);
         agePanel.add(ageTextField);
 
         // Create a panel to store the level of disability
         JPanel disPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        disPanel.setBackground(Color.decode("#263543"));
         JLabel disLabel = new JLabel("Your level of disability: ");
+        disLabel.setForeground(Color.decode("#B9A57C"));
         JTextField disTextField = new JTextField(5);
+        disTextField.setBackground(Color.decode("#6D87A1"));
         disPanel.add(disLabel);
         disPanel.add(disTextField);
 
         JPanel butPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        butPanel.setBackground(Color.decode("#263543"));
         JButton button2 = new JButton("calculate");
         butPanel.add(button2);
 
@@ -428,7 +496,8 @@ public class javagui {
                 System.out.println("Age: " + age);
                 System.out.println("Lvl of disability: " + lvl);
                 pensionReslt = new javagui().pension(lvl, age, staj, numOfJobs, medSal);
-                outLabel.setText("<html><div style='text-align: center;'>" + pensionReslt + "</div></html>");
+                String formattedNumber = df.format(pensionReslt);
+                outLabel.setText("<html><div style='text-align: center;'>" + formattedNumber + "</div></html>");
 
                 System.out.println("Your pension will be: " + pensionReslt);
             }
@@ -450,16 +519,29 @@ public class javagui {
         //Panels declaration
         JPanel optionsPanel = new JPanel();
         optionsPanel.setLayout(new GridLayout(7, 1));
+        optionsPanel.setBackground(Color.decode("#263543"));
 
         JPanel nJobsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        nJobsPanel.setBackground(Color.decode("#263543"));
 
         JPanel jobsPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         jobsPanel2.setLayout(new BoxLayout(jobsPanel2, BoxLayout.Y_AXIS));
+        jobsPanel2.setBackground(Color.decode("#263543"));
 
         JScrollPane scrollField2 = new JScrollPane(jobsPanel2);
         scrollField2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollField2.setBorder(null);
+        scrollField2.setBackground(Color.decode("#263543"));
+        scrollField2.getVerticalScrollBar().setBackground(Color.decode("#263543"));
+        scrollField2.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = Color.decode("#263543");
+            }
+        });
 
         JPanel lbutton = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        lbutton.setBackground(Color.decode("#263543"));
 
         
 
@@ -471,6 +553,14 @@ public class javagui {
         JLabel fifthButton = new JLabel("5. For managers at the level of a structural unit");
         JLabel sixthButton = new JLabel("6. For heads of enterprises and their deputies");
 
+        pLevels.setForeground(Color.decode("#B9A57C"));
+        firstButton.setForeground(Color.decode("#B9A57C"));
+        secondButton.setForeground(Color.decode("#B9A57C"));
+        thirdButton.setForeground(Color.decode("#B9A57C"));
+        fourthButton.setForeground(Color.decode("#B9A57C"));
+        fifthButton.setForeground(Color.decode("#B9A57C"));
+        sixthButton.setForeground(Color.decode("#B9A57C"));
+
         optionsPanel.add(pLevels);
         optionsPanel.add(firstButton);
         optionsPanel.add(secondButton);
@@ -481,7 +571,9 @@ public class javagui {
 
 
         JLabel nEmpsLabel = new JLabel("Enter Number of employments: ");
+        nEmpsLabel.setForeground(Color.decode("#B9A57C"));
         JTextField nTextField = new JTextField(5);
+        nTextField.setBackground(Color.decode("#6D87A1"));
         JButton nButton = new JButton("set");
 
         nJobsPanel.add(nEmpsLabel);
@@ -500,13 +592,19 @@ public class javagui {
         
                 for (int i = 0; i < number; i++) {
                     JPanel fPanel2 = new JPanel();
+                    fPanel2.setBackground(Color.decode("#263543"));
                     fPanel2.setLayout(new FlowLayout(FlowLayout.LEFT));
         
                     JLabel lbl2 = new JLabel("Years in job:" + (i + 1) + ": ");
+                    lbl2.setForeground(Color.decode("#B9A57C"));
                     JTextField tF2 = new JTextField(7);
+                    tF2.setBackground(Color.decode("#6D87A1"));
                     JLabel mmonths = new JLabel("months:");
+                    mmonths.setForeground(Color.decode("#B9A57C"));
                     JTextField ttF = new JTextField(7);
+                    ttF.setBackground(Color.decode("#6D87A1"));
                     JLabel lbl22 = new JLabel("Prof. lvl: ");
+                    lbl22.setForeground(Color.decode("#B9A57C"));
                     JComboBox<Integer> tF22 = new JComboBox<>(new Integer[]{1, 2, 3, 4, 5, 6});
         
                     fPanel2.add(lbl2);
@@ -563,7 +661,8 @@ public class javagui {
                 System.out.println("Qualification: " + Arrays.toString(Cpr_1));
                 
                 pensionReslt = new javagui().cp(numberOfJobs, years_n, months_n, Cpr_1);
-                outLabel.setText("<html><div style='text-align: center;'>" + pensionReslt + "</div></html>");
+                String formattedNumber = df.format(pensionReslt);
+                outLabel.setText("<html><div style='text-align: center;'>" + formattedNumber + "</div></html>");
 
                 System.out.println("Your pension will be: " + pensionReslt);
 
@@ -584,9 +683,9 @@ public class javagui {
 
         // Create a tabbed pane with two tabs
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("old age pension", oldAgePensionPanel); // First tab with an empty panel
-        tabbedPane.addTab("1999", ussrJPanel);
-        tabbedPane.addTab("Disability Pension", menuComponentsPanel); // Third tab with the menu panel
+        tabbedPane.addTab("Golden Years", oldAgePensionPanel); // First tab with an empty panel
+        tabbedPane.addTab("Till 1999", ussrJPanel);
+        tabbedPane.addTab("Ability Aid", menuComponentsPanel); // Third tab with the menu panel
 
         mainPanel.add(outPanel, BorderLayout.NORTH);
         mainPanel.add(tabbedPane, BorderLayout.CENTER);
