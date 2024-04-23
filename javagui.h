@@ -23,6 +23,14 @@ JNIEXPORT jdouble JNICALL Java_javagui_pension
 JNIEXPORT jdouble JNICALL Java_javagui_calculatePension
   (JNIEnv *, jobject, jint, jint, jfloat, jint, jfloatArray, jfloatArray, jfloatArray, jint, jfloat, jfloat);
 
+/*
+ * Class:     javagui
+ * Method:    cp
+ * Signature: (I[I[I[I)D
+ */
+JNIEXPORT jdouble JNICALL Java_javagui_cp
+  (JNIEnv *, jobject, jint, jintArray, jintArray, jintArray);
+
 #ifdef __cplusplus
 }
 #endif

@@ -26,6 +26,12 @@ public class javagui {
     private static float Ta_months = 0;
     private static JTextField g1;
     private static JTextField g2;
+
+    // variables for 1999
+    private static int numberOfJobs;
+    private static int[] years_n;
+    private static int[] months_n;
+    private static int[] Cpr_1;
     
 
     static {
@@ -34,6 +40,7 @@ public class javagui {
 
     private native double pension(int n, int year, int staj, int k, double sal[]);
     private native double calculatePension(int Tl, int Tmin, float Pmin, int k, float years[], float months[], float salary[], int choice, float Ta_years, float Ta_months);
+    private native double cp(int n, int years_n[], int months_n[], int Cpr_1[]);
 
     public static void main(String[] args) {
 
@@ -74,6 +81,10 @@ public class javagui {
 
         JPanel selPanel2 = new JPanel();
         selPanel2.setLayout(new GridLayout(7, 1));
+
+        // Create a panel for 1999 pensions
+        JPanel ussrJPanel = new JPanel();
+        ussrJPanel.setLayout(new BoxLayout(ussrJPanel, BoxLayout.Y_AXIS));
 
 
         // Here is building the menu for age pension
@@ -435,11 +446,147 @@ public class javagui {
 
 
 
+        // 1999 Pensions
+        //Panels declaration
+        JPanel optionsPanel = new JPanel();
+        optionsPanel.setLayout(new GridLayout(7, 1));
+
+        JPanel nJobsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        JPanel jobsPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        jobsPanel2.setLayout(new BoxLayout(jobsPanel2, BoxLayout.Y_AXIS));
+
+        JScrollPane scrollField2 = new JScrollPane(jobsPanel2);
+        scrollField2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        JPanel lbutton = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        
+
+        JLabel pLevels = new JLabel("Professional levels:");
+        JLabel firstButton = new JLabel("1. For agricultural workers, handymen (I, II qualification category) and unskilled support staff");
+        JLabel secondButton = new JLabel("2. For workers of average qualification (III, IV qualification category)");
+        JLabel thirdButton = new JLabel("3. For highly qualified workers (V, VI, VII, VIII qualification category) and specialists with secondary specialized education");
+        JLabel fourthButton = new JLabel("4. For specialists with higher education");
+        JLabel fifthButton = new JLabel("5. For managers at the level of a structural unit");
+        JLabel sixthButton = new JLabel("6. For heads of enterprises and their deputies");
+
+        optionsPanel.add(pLevels);
+        optionsPanel.add(firstButton);
+        optionsPanel.add(secondButton);
+        optionsPanel.add(thirdButton);
+        optionsPanel.add(fourthButton);
+        optionsPanel.add(fifthButton);
+        optionsPanel.add(sixthButton);
+
+
+        JLabel nEmpsLabel = new JLabel("Enter Number of employments: ");
+        JTextField nTextField = new JTextField(5);
+        JButton nButton = new JButton("set");
+
+        nJobsPanel.add(nEmpsLabel);
+        nJobsPanel.add(nTextField);
+        nJobsPanel.add(nButton);
+
+        nButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jobsPanel2.removeAll();
+        
+                String numOfFields = nTextField.getText();
+                int number = 0;
+                if (!numOfFields.isEmpty()) number = Integer.parseInt(numOfFields);
+                numberOfJobs = number;
+        
+                for (int i = 0; i < number; i++) {
+                    JPanel fPanel2 = new JPanel();
+                    fPanel2.setLayout(new FlowLayout(FlowLayout.LEFT));
+        
+                    JLabel lbl2 = new JLabel("Years in job:" + (i + 1) + ": ");
+                    JTextField tF2 = new JTextField(7);
+                    JLabel mmonths = new JLabel("months:");
+                    JTextField ttF = new JTextField(7);
+                    JLabel lbl22 = new JLabel("Prof. lvl: ");
+                    JComboBox<Integer> tF22 = new JComboBox<>(new Integer[]{1, 2, 3, 4, 5, 6});
+        
+                    fPanel2.add(lbl2);
+                    fPanel2.add(tF2);
+                    fPanel2.add(mmonths);
+                    fPanel2.add(ttF);
+                    fPanel2.add(lbl22);
+                    fPanel2.add(tF22);
+                    jobsPanel2.add(fPanel2);
+                }
+                // Refresh the panel
+                jobsPanel2.revalidate();
+                jobsPanel2.repaint();
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+        
+        JButton calBut = new JButton("calculate");
+        lbutton.add(calBut);
+
+        calBut.addActionListener(new ActionListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Initialize arrays to store data
+                years_n = new int[numberOfJobs];
+                months_n = new int[numberOfJobs];
+                Cpr_1 = new int[numberOfJobs];
+        
+                // Loop through each panel
+                for (int i = 0; i < numberOfJobs; i++) {
+                    // Get the panel at index i from jobsPanel2
+                    JPanel panel = (JPanel) jobsPanel2.getComponent(i);
+        
+                    // Get the text field for years from the panel
+                    JTextField yearsTextField = (JTextField) panel.getComponent(1);
+                    // Parse the text and store in years_n array
+                    years_n[i] = Integer.parseInt(yearsTextField.getText());
+        
+                    // Get the text field for months from the panel
+                    JTextField monthsTextField = (JTextField) panel.getComponent(3);
+                    // Parse the text and store in months_n array
+                    months_n[i] = Integer.parseInt(monthsTextField.getText());
+        
+                    // Get the combo box for professional level from the panel
+                    JComboBox<Integer> professionalLevelComboBox = (JComboBox<Integer>) panel.getComponent(5);
+                    // Get the selected item and store in Cpr_1 array
+                    Cpr_1[i] = (int) professionalLevelComboBox.getSelectedItem();
+                }
+                System.out.println("Number of Jobs: " + numberOfJobs);
+                System.out.println("Years: " + Arrays.toString(years_n));
+                System.out.println("Months: " + Arrays.toString(months_n));
+                System.out.println("Qualification: " + Arrays.toString(Cpr_1));
+                
+                pensionReslt = new javagui().cp(numberOfJobs, years_n, months_n, Cpr_1);
+                outLabel.setText("<html><div style='text-align: center;'>" + pensionReslt + "</div></html>");
+
+                System.out.println("Your pension will be: " + pensionReslt);
+
+            }
+        });
+        
+
+
+        //panels grouping
+        ussrJPanel.add(optionsPanel);
+        ussrJPanel.add(nJobsPanel);
+        ussrJPanel.add(scrollField2);
+        ussrJPanel.add(lbutton);
+        //End of this section
+
+
+
 
         // Create a tabbed pane with two tabs
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("old age pension", oldAgePensionPanel); // Second tab with an empty panel
-        tabbedPane.addTab("Disability Pension", menuComponentsPanel); // First tab with the menu panel
+        tabbedPane.addTab("old age pension", oldAgePensionPanel); // First tab with an empty panel
+        tabbedPane.addTab("1999", ussrJPanel);
+        tabbedPane.addTab("Disability Pension", menuComponentsPanel); // Third tab with the menu panel
 
         mainPanel.add(outPanel, BorderLayout.NORTH);
         mainPanel.add(tabbedPane, BorderLayout.CENTER);
