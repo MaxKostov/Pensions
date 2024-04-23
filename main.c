@@ -1,100 +1,107 @@
 #include <stdio.h>
+#include <jni_md.h>
+#include <jni.h>
+#include "javagui.h"
 
-double med_salary(int sal[], int  n, int staj);
-double formula(double s, int staj,int year, int n);
-double defpens(int n);
+// Function to calculate pension
+double calculatePension(int Tl, int Tmin, float Pmin, int k, float years[], float months[], float salary[], int choice, float Ta_years, float Ta_months) {
+    float Tt = 0;
+    float n, Zp = 0;
+    float Tn = 34;
 
-int main()
-{
-    int n; // variable to store the level of disability
-    int year;
-    int staj = 0; // Initialize staj to 0
-    int k; //variable to store number of employments
+    for (int i = 0; i < k; i++) {
+        Tt += years[i] + months[i] / 12;
+    }
 
-    printf("Enter the number of employments: ");
+    for (int i = 0; i < k; i++) {
+        Zp += salary[i];
+    }
+    Zp = Zp/k;
+    float coni=0;
+    for (int i=0;i<(int)Tt;i++)
+    {
+        coni = coni + 28.66*0.01*Zp;
+        Zp = Zp/1.16;
+    }
+    float Vav = 29 * 0.01 * coni;
+    float P = 1.35 * 0.01 * Tt * Vav;
+
+    if (Tt>Tmin && Tt<Tl)
+        P = Pmin * Tt/Tl;
+    else if (P<Pmin)
+        P = Pmin;
+
+    if (Tt<Tmin)
+        P = 130.0;
+
+    float Ta;
+    if (choice == 1)
+    {
+        Ta = Ta_years + Ta_months/12;
+        P = P + 2 * 0.01 * Ta * Vav;
+    }
+    
+    // Returning the calculated pension and the total years worked
+    return P;
+}
+
+
+JNIEXPORT jdouble JNICALL Java_javagui_calculatePension
+  (JNIEnv *env, jobject obj, jint Tl, jint Tmin, jfloat Pmin, jint k, jfloatArray yearsArray, jfloatArray monthsArray, jfloatArray salaryArray, jint choice, jfloat Ta_years, jfloat Ta_months) {
+    
+    // Convert jfloatArray to C arrays
+    jfloat *years = (*env)->GetFloatArrayElements(env, yearsArray, NULL);
+    jfloat *months = (*env)->GetFloatArrayElements(env, monthsArray, NULL);
+    jfloat *salary = (*env)->GetFloatArrayElements(env, salaryArray, NULL);
+    
+    // Call the C function to calculate the pension
+    double pension = calculatePension(Tl, Tmin, Pmin, k, years, months, salary, choice, Ta_years, Ta_months);
+    
+    // Release the allocated memory
+    (*env)->ReleaseFloatArrayElements(env, yearsArray, years, 0);
+    (*env)->ReleaseFloatArrayElements(env, monthsArray, months, 0);
+    (*env)->ReleaseFloatArrayElements(env, salaryArray, salary, 0);
+    
+    // Return the calculated pension
+    return pension;
+}
+
+
+/*
+int main() {
+    int Tl = 34, Tmin = 15;
+    float Pmin = 2777.86;
+    int k;
+    printf("Input number of your jobs: ");
     scanf("%d", &k);
 
-    int sal[k];
-    double msal;
-    double pension;
-    double minpens;
+    float years[k], months[k], salary[k];
 
-    for (int i = 0; i < k; i++)
-    {
-        int j, l;
-        printf("Enter the number of months you worked in company N%i: ", i+1);
-        scanf("%d", &j);
-        printf("Enter your salary in this company: ");
-        scanf("%d", &l); // Use %lf for double
-        sal[i] = j * l;
-        staj += j;
+    for (int i = 0; i < k; i++) {
+        printf("Input how many years and months you were working on job number %d:", i + 1);
+        scanf("%f %f", &years[i], &months[i]);
     }
 
-    printf("Enter your age: ");
-    scanf("%d", &year);
-    do
-    {
-        printf("Enter your level of disability: ");
-        scanf("%d", &n);
-    } while (n < 1 || n > 3);
-
-    if ((year < 23 && staj/12 < 2) || (year > 23 && year < 29 && staj/12 < 4) || (year > 29 && year < 33 && staj/12 < 7) || (year > 33 && year < 37 && staj/12 < 10) || (year > 37 && year < 41 && staj/12 < 13) || (year > 41 && staj/12 < 15))
-    {
-        pension = defpens(n);
-        printf("Your pension will be %f \n", pension);
-        return 0;
+    for (int i = 0; i < k; i++) {
+        printf("Input your salary on job %d:", i + 1);
+        scanf("%f", &salary[i]);
     }
 
-    msal = med_salary(sal, k, staj);
-    pension = formula(msal, staj, year, n);
-    minpens = defpens(n);
-    if (pension < minpens) pension = minpens;
-    printf("Your pension will be %f \n", pension);
+    int choice;
+    float Ta_years, Ta_months;
+
+    // Taking input for working after retirement
+    printf("\nHave you worked after retirement age? (Enter 1 for Yes, 0 for No)");
+    scanf("%d", &choice);
+    
+    if (choice == 1) {
+        printf("Input how many years and months have you worked after retirement age: ");
+        scanf("%f%f", &Ta_years, &Ta_months);
+    }
+
+    // Calling the function to calculate pension
+    double pension = calculatePension(Tl, Tmin, Pmin, k, years, months, salary, choice, Ta_years, Ta_months);
+
+    return 0;
 }
-
-double med_salary(int sal[], int  n, int staj)
-{
-    int sum = 0;
-    for (int i = 0; i < n; i++) 
-    {
-        sum += sal[i];
-    }
-    return sum/staj;
-}
-
-double formula(double s, int staj,int year, int n)
-{
-    double p;
-    double staj_in_years = staj/12;
-    int v = year - 18;
-    if (v > 39) v = 39;
-    switch (n)
-    {
-    case 1:
-        p = 0.42 * s + (staj_in_years / v) * s * 0.1;
-        break;
-    case 2:
-        p = 0.35 * s + (staj_in_years / v) * s * 0.1;
-        break;
-    case 3:
-        p = 0.20 * s + (staj_in_years / v) * s * 0.1;
-        break;
-    }
-    return p;
-}
-
-double defpens(int n)
-{
-    switch (n)
-    {
-    case 1:
-        return 1965.47;
-        break;
-    case 2:
-        return 1834.43;
-        break;
-    case 3:
-        return 1310.31;
-    }
-    return 0.0;
-}
+*/

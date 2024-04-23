@@ -6,17 +6,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class javagui {
+    // Disability pension
     private static int numOfJobs;
     private static int age;
     private static int lvl;
     private static int staj = 0;
     private static double pensionReslt;
 
+    // variables for old age pension
+    private static int Tl = 34;
+    private static int Tmin = 15;
+    private static int k;
+    private static float Pmin = 2777.86F;
+    private static float[] years;
+    private static float[] months;
+    private static float[] salary;
+    private static int choice;
+    private static float Ta_years = 0;
+    private static float Ta_months = 0;
+    private static JTextField g1;
+    private static JTextField g2;
+    
+
     static {
         System.loadLibrary("native");
     }
 
     private native double pension(int n, int year, int staj, int k, double sal[]);
+    private native double calculatePension(int Tl, int Tmin, float Pmin, int k, float years[], float months[], float salary[], int choice, float Ta_years, float Ta_months);
 
     public static void main(String[] args) {
 
@@ -55,6 +72,9 @@ public class javagui {
         JPanel oldAgePensionPanel = new JPanel();
         oldAgePensionPanel.setLayout(new BoxLayout(oldAgePensionPanel, BoxLayout.Y_AXIS));
 
+        JPanel selPanel2 = new JPanel();
+        selPanel2.setLayout(new GridLayout(7, 1));
+
 
         // Here is building the menu for age pension
 
@@ -74,32 +94,21 @@ public class javagui {
 
         JPanel calcButton = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
+        JPanel overworkPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
 
         // Creating the radio buttons:
-        JLabel pLevels = new JLabel("Professional levels:");
-        JLabel firstButton = new JLabel("1. For agricultural workers, handymen (I, II qualification category) and unskilled support staff");
-        JLabel secondButton = new JLabel("2. For workers of average qualification (III, IV qualification category)");
-        JLabel thirdButton = new JLabel("3. For highly qualified workers (V, VI, VII, VIII qualification category) and specialists with secondary specialized education");
-        JLabel fourthButton = new JLabel("4. For specialists with higher education");
-        JLabel fifthButton = new JLabel("5. For managers at the level of a structural unit");
-        JLabel sixthButton = new JLabel("6. For heads of enterprises and their deputies");
-        
-        JRadioButton maleButton = new JRadioButton("Male");
-        JRadioButton femaleButton = new JRadioButton("Female");
+        JLabel retLabel = new JLabel("Have you worked after retirement age?");       
+        JRadioButton maleButton = new JRadioButton("Yes");
+        JRadioButton femaleButton = new JRadioButton("No");
 
         ButtonGroup group = new ButtonGroup();
         group.add(maleButton);
         group.add(femaleButton);
+
         
         // Adding radio buttons to the panel
-        selPanel.add(pLevels);
-        selPanel.add(firstButton);
-        selPanel.add(secondButton);
-        selPanel.add(thirdButton);
-        selPanel.add(fourthButton);
-        selPanel.add(fifthButton);
-        selPanel.add(sixthButton);
-
+        maleFemPanel.add(retLabel);
         maleFemPanel.add(maleButton);
         maleFemPanel.add(femaleButton);
 
@@ -120,28 +129,28 @@ public class javagui {
                 String numOfFields = jobsTextField.getText();
                 int number = 0;
                 if (!numOfFields.isEmpty()) number = Integer.parseInt(numOfFields);
-                // place for numOfJobs
+                k = number;
 
                 for (int i = 0; i < number; i++) {
                     JPanel fPanel = new JPanel();
                     fPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
                     
                      
-                    JLabel lbl = new JLabel("Job " + (i + 1) + ": ");
-                    JTextField tF = new JTextField(20);
+                    JLabel lbl = new JLabel("Years in job " + (i + 1) + ": ");
+                    JTextField tF = new JTextField(5);
                     tF.setPreferredSize(new Dimension(150, 20));
-                    JLabel lbl2 = new JLabel("Professional level: ");
-                    /* 
-                    JTextField tF2 = new JTextField(20);
-                    */
-                    JComboBox<Integer> tF2 = new JComboBox<>(new Integer[]{1, 2, 3, 4, 5, 6});
-
+                    JLabel lbl2 = new JLabel("months: ");
+                    JTextField tF2 = new JTextField(5);
+                    JLabel lbl3 = new JLabel("salary: ");
+                    JTextField tF3 = new JTextField(5);
 
 
                     fPanel.add(lbl);
                     fPanel.add(tF);
                     fPanel.add(lbl2);
                     fPanel.add(tF2);
+                    fPanel.add(lbl3);
+                    fPanel.add(tF3);
                     jobsPanel.add(fPanel);
                 }
                 // Refresh the panel
@@ -152,16 +161,107 @@ public class javagui {
             }
         });
 
+        maleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                overworkPanel.removeAll();
+                JLabel gg = new JLabel("Input how many years and months have you worked after retirement age: ");
+                g1 = new JTextField(5);
+                g2 = new JTextField(5);
+
+                choice = 1;
+
+                overworkPanel.add(gg);
+                overworkPanel.add(g1);
+                overworkPanel.add(g2);
+
+                overworkPanel.revalidate();
+                overworkPanel.repaint();
+                frame.revalidate();
+                frame.repaint();
+
+            }
+        });
+
+        femaleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                choice = 0;
+                overworkPanel.removeAll();
+                overworkPanel.revalidate();
+                overworkPanel.repaint();
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
         // Calculate button
         JButton cButton = new JButton("calculate");
         calcButton.add(cButton);
 
+        cButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (choice == 1) {
+                    String g1Text = g1.getText();
+                    String g2Text = g2.getText();
+
+                    if (!g1Text.isEmpty() && !g2Text.isEmpty()) {
+                        Ta_years = Float.parseFloat(g1Text);
+                        Ta_months = Float.parseFloat(g2Text);
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Please fill in both years and months with valid numbers", "Error", JOptionPane.ERROR_MESSAGE);
+                        return; 
+                    }
+                }
+
+                years = new float[k];
+                months = new float[k];
+                salary = new float[k];
+
+                Component[] components = jobsPanel.getComponents();
+                for (int i = 0; i < k; i++) {
+                    JPanel jobJPanel = (JPanel) components[i];
+                    JTextField yearsField = (JTextField) jobJPanel.getComponent(1);
+                    JTextField monthsField = (JTextField) jobJPanel.getComponent(3);
+                    JTextField salaryField = (JTextField) jobJPanel.getComponent(5);
+
+                    String yString = yearsField.getText();
+                    String mString = monthsField.getText();
+                    String sString = salaryField.getText();
+                    if (!yString.isEmpty() && !mString.isEmpty() && !sString.isEmpty()) {
+                        years[i] = Float.parseFloat(yString);
+                        months[i] = Float.parseFloat(mString);
+                        salary[i] = Float.parseFloat(sString);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(frame, "Please fill in all fields with valid numbers", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    
+                }
+                System.out.println("Years: " + Arrays.toString(years));
+                System.out.println("Months: " + Arrays.toString(months));
+                System.out.println("Salary: " + Arrays.toString(salary));
+                System.out.println("Choice: " + choice);
+                System.out.println("Ta_years: " + Ta_years);
+                System.out.println("Ta_months: " + Ta_months);
+                System.out.println("k: " + k);
+
+                pensionReslt = new javagui().calculatePension(Tl, Tmin, Pmin, k, years, months, salary, choice, Ta_years, Ta_months);
+                outLabel.setText("<html><div style='text-align: center;'>" + pensionReslt + "</div></html>");
+
+                System.out.println("Your pension will be: " + pensionReslt);
+            }
+        });
+
 
         // Grouping all panels in one
         oldAgePensionPanel.add(selPanel);
-        oldAgePensionPanel.add(maleFemPanel);
         oldAgePensionPanel.add(jobSetJPanel);
         oldAgePensionPanel.add(scrollField);
+        oldAgePensionPanel.add(maleFemPanel);
+        oldAgePensionPanel.add(overworkPanel);
         oldAgePensionPanel.add(calcButton);
         
 
@@ -173,19 +273,7 @@ public class javagui {
 
         // Create a label and text field for entering the number
         JLabel numberLabel = new JLabel("Enter Number of employments:");
-        JTextField numberTextField = new JTextField(10);
-
-        JPanel maleFemPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        JRadioButton maleButton2 = new JRadioButton("Male");
-        JRadioButton femaleButton2 = new JRadioButton("Female");
-
-        ButtonGroup group2 = new ButtonGroup();
-        group2.add(maleButton2);
-        group2.add(femaleButton2);
-        
-        maleFemPanel2.add(maleButton2);
-        maleFemPanel2.add(femaleButton2);
+        JTextField numberTextField = new JTextField(5);
 
         // Create a panel for number input
         JPanel numberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -221,11 +309,11 @@ public class javagui {
                     fieldPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
                     JLabel label = new JLabel("Job " + (i + 1) + ": ");
-                    JTextField textField = new JTextField(20);
+                    JTextField textField = new JTextField(5);
                     textField.setPreferredSize(new Dimension(150, 20));
 
                     JLabel label2 = new JLabel("Salary: ");
-                    JTextField textField2 = new JTextField(20);
+                    JTextField textField2 = new JTextField(5);
 
                     fieldPanel.add(label);
                     fieldPanel.add(textField);
@@ -252,14 +340,14 @@ public class javagui {
         // Create a panel to store the age
         JPanel agePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel ageLabel = new JLabel("Your age: ");
-        JTextField ageTextField = new JTextField(10);
+        JTextField ageTextField = new JTextField(5);
         agePanel.add(ageLabel);
         agePanel.add(ageTextField);
 
         // Create a panel to store the level of disability
         JPanel disPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel disLabel = new JLabel("Your level of disability: ");
-        JTextField disTextField = new JTextField(10);
+        JTextField disTextField = new JTextField(5);
         disPanel.add(disLabel);
         disPanel.add(disTextField);
 
@@ -336,7 +424,7 @@ public class javagui {
         });
 
         // Add components to the menu components panel
-        menuComponentsPanel.add(maleFemPanel2);
+        menuComponentsPanel.add(selPanel2);
         menuComponentsPanel.add(numberPanel);
         menuComponentsPanel.add(scrollPane);
         menuComponentsPanel.add(agePanel);

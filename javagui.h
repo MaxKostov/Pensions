@@ -15,6 +15,14 @@ extern "C" {
 JNIEXPORT jdouble JNICALL Java_javagui_pension
   (JNIEnv *, jobject, jint, jint, jint, jint, jdoubleArray);
 
+/*
+ * Class:     javagui
+ * Method:    calculatePension
+ * Signature: (IIFI[F[F[FIFF)D
+ */
+JNIEXPORT jdouble JNICALL Java_javagui_calculatePension
+  (JNIEnv *, jobject, jint, jint, jfloat, jint, jfloatArray, jfloatArray, jfloatArray, jint, jfloat, jfloat);
+
 #ifdef __cplusplus
 }
 #endif

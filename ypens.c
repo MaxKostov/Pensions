@@ -1,69 +1,74 @@
-// Раздел 1:
-// Исчисление размера пенсии по возрастудля застрахованных лиц,
-// которые после 1 января 1999 года не приобрели страховой стаж или
-// у которых страховой стаж, приобретенный после указанной даты,
-// составляет менее 5 лет
+// Раздел 2:
+// Исчисление размера пенсии по возрасту из застрахованного
+// дохода, полученного после 1 января 1999 года
 
-/*
+// P = 1,35% * Tt * Vav,
+// P = Pmin * Tt/Tl,
+
 #include <stdio.h>
 
-int main {
-    
+int main() {
+    int Tl = 34, Tmin = 15;
+    float Pmin = 2777.86;
+    int k;
+    printf("Input number of your jobs: ");
+    scanf("%d", &k);
+
+    float years[k], months[k], salary[k];
+    float Tt = 0;
+    float n, Zp = 0;
+    float Tn = 34;
+
+    for (int i = 0; i < k; i++) {
+        printf("Input how many years and months you were working on job number %d:", i + 1);
+        scanf("%f %f", &years[i], &months[i]);
+        Tt += years[i] + months[i] / 12;
+    }
+
+    for (int i = 0; i < k; i++) {
+        printf("Input your salary on job %d:", i + 1);
+        scanf("%f", &salary[i]);
+        Zp += salary[i];
+    }
+    Zp = Zp/k;
+    float coni=0;
+    for (int i=0;i<(int)Tt;i++)
+    {
+        coni = coni + 28.66*0.01*Zp;
+        Zp = Zp/1.16;
+    }
+    float Vav = 29 * 0.01 * coni;
+    float P = 1.35 * 0.01 * Tt * Vav;
+
+    if (Tt>Tmin && Tt<Tl)
+        P = Pmin * Tt/Tl;
+    else if (P<Pmin)
+        P = Pmin;
+
+    if (Tt<Tmin)
+        printf("You will get stipend as 130 \n");
+    else
+        printf("Your Pension will be: %.2f", P);
+
+
+    char choice;
+    float Ta_years, Ta_months, Ta;
+    printf("\nHave you worked after retirement age? (Y/N)");
+    scanf(" %c", &choice);
+    printf("\n%c", choice);
+    if (choice == 'Y')
+    {
+        printf("Input how many years and months have you worked: ");
+        scanf("%f%f", &Ta_years, &Ta_months);
+        Ta = Ta_years + Ta_months/12;
+        P = P + 2 * 0.01 * Ta * Vav;
+        printf("Your Pension will be: %.2f", P);
+    }
+    else if (choice != 'Y' || choice != 'N')
+        printf("\nERROR 404");
+    else
+        printf("Your Pension will be: %.2f \n", P);
     return 0;
 }
 
-int ypens(int numJobs, int years_n[], int months_n[], int Cpr_1[])
-{
-    float Pmin = 2777.86;
-    int years_of_working_total, months_of_working;
-    int n = numJobs;
-    printf("Professional levels: \n"
-           "1. For agricultural workers, handymen (I, II qualification category) and unskilled support staff \n"
-           "2. For workers of average qualification (III, IV qualification category) \n"
-           "3. For highly qualified workers (V, VI, VII, VIII qualification category) and specialists with secondary specialized education \n"
-           "4. For specialists with higher education \n"
-           "5. For managers at the level of a structural unit \n"
-           "6. For heads of enterprises and their deputies \n");
-
-    int years_n[n], months_n[n];
-    int Cpr_1[n];
-    for (int i=0;i<n;i++){
-        printf(" Input years and months of working on this job: ");
-        scanf("%d%d", &years_n[i], &months_n[i]);
-        printf(" Input your professional level: ");
-        scanf("%d", &Cpr_1[i]);
-    }
-    float Cpr[n];
-    for (int i=0;i<n;i++){
-        switch (Cpr_1[i]){
-            case 1:
-                Cpr[i] = 1;
-                break;
-            case 2:
-                Cpr[i] = 1.2;
-                break;
-            case 3:
-                Cpr[i] = 1.5;
-                break;
-            case 4:
-                Cpr[i] = 1.8;
-                break;
-            case 5:
-                Cpr[i] = 2;
-                break;
-            case 6:
-                Cpr[i] = 3;
-                break;
-        }
-    }
-
-    float Tt_and_Cpr;
-    for (int i=0;i<n;i++){
-    Tt_and_Cpr=Tt_and_Cpr+(years_n[i]+(months_n[i]/12))*Cpr[i];
-    }
-
-    int Tmin = 15;
-    float P = Pmin/(2*Tmin) * Tt_and_Cpr;
-    printf("Here is your pension: %.2f \n", P);
-    return 0;
-}*/
+// 3676,7
